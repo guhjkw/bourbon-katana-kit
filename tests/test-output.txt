@@ -1,0 +1,76 @@
+
+1. Reading the exports
+  PASS 27 SOS items, 36 recipe lines, 17 order lines
+  PASS SOS columns found by name
+  PASS order columns found by name
+  PASS US order dates read month first
+  PASS a trailing space in a code is kept for the report
+  PASS "Archived: Yes" means archived
+  PASS shipped orders are not open
+  PASS real Excel SOS export: title row skipped, same 27 items, numbers read
+  PASS ...and the same findings as the CSV
+
+2. Product codes
+  PASS 9 to fix before importing, 1 warning
+  PASS same code on two items: LBL-FRONT
+  PASS capitals clash: WAX-SOY vs wax-soy
+  PASS no code: Shipping Box Large
+  PASS trailing space: "LD-32 "
+  PASS orders spell SB-1OIL as SB-1Oil
+  PASS typo SB-80Z suggests SB-8OZ
+  PASS room spray has no recipe
+  PASS recipe names an unknown oil (FO-VAN)
+  PASS archived Holiday Vanilla still ordered
+  PASS material with no cost: Laundry Booster Base
+  PASS a recipe can name a component by its name ("Amber Jar 8 oz")
+
+3. Katana files
+  PASS 10 products, 15 materials (one without a code), 2 left out (service, archived duplicate)
+  PASS Katana uses the spelling Faire sends: SB-1Oil
+  PASS products file: 10 rows with Katana’s column names
+  PASS items with a recipe are Make?=Yes, Buy?=No
+  PASS materials file leaves out the item with no code (14 rows)
+  PASS recipes file: 35 lines, one per ingredient, on Katana codes
+  PASS the SOS code is kept in Additional info when the code changes
+  PASS "clean capitals" mode keeps SB-1OIL and lists the Faire listing to change
+  PASS the products .xlsx opens in Excel (openpyxl)
+
+4. Filling Katana’s own template
+  PASS blank template read: header row only
+  PASS filled in the template’s own order
+  PASS a template column we have no data for stays blank (Registered barcode)
+  PASS nothing is listed as unplaced when every field with data has a column
+  PASS a field the template has no column for is listed, not lost (Category)
+
+5. Order desk (as of 27 Oct 2026)
+  PASS 7 open orders, 16 lines, 228 units, $2,610, 5 retailers
+  PASS 9 lines need attention
+  PASS Oak & Ember order is past its ship-by date
+  PASS price $14 on MarketTime vs $16 in SOS
+  PASS typo line is unknown with a suggestion, and due this week
+  PASS no ship-by date, and the same item twice in one order
+  PASS zero quantity flagged
+  PASS differently spelled codes still map to the Katana item
+
+6. Make plan (next 14 days, topping up to reorder points)
+  PASS wax line makes 152 units, misc 46, mop 20, laundry 18
+  PASS Sweet Bourbon 8 oz: 36 ordered + 24 reorder point - 18 on hand = 42
+  PASS orders past the 14 days (20 Nov) wait; zero-quantity and unknown lines are ignored
+  PASS room spray shows as "no recipe yet" on the make list
+  PASS Sweet Bourbon oil: 120.2 oz needed, 104.2 oz to buy
+  PASS enough soy wax, jars and wicks: nothing to buy
+  PASS materials spend $572.30, one material has no cost
+  PASS without topping up, only the orders: 36 - 18 = 18 candles
+  PASS a 30-day window takes in the 20 Nov order
+
+7. Cutover plan
+  PASS go-live on the Monday four weeks out: 30 Nov
+  PASS steps skip weekends and Thanksgiving
+  PASS first step names the 9 fixes and the rename
+  PASS a go-live too close to today is flagged
+
+8. Bad rows are reported, not fatal
+  PASS unreadable quantity, missing component and missing order code reported
+  PASS downloads have one row per finding
+
+58 passed, 0 failed

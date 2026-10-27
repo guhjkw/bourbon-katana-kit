@@ -1,0 +1,18 @@
+Order Number,Order Date,Retailer,Ship By,SKU,Product Name,Quantity,Wholesale Price,Status,Channel
+F-10021,10/15/2026,Oak & Ember Gifts,10/24/2026,SB-8OZ,Sweet Bourbon 8 oz Candle,12,16.00,New,Faire
+F-10021,10/15/2026,Oak & Ember Gifts,10/24/2026,SB-1Oil,Sweet Bourbon Fragrance Oil 1 oz,6,9.00,New,Faire
+F-10021,10/15/2026,Oak & Ember Gifts,10/24/2026,BL-1OIL,Bourbon Leather Fragrance Oil 1 oz,6,9.00,New,Faire
+F-10034,10/20/2026,Riverbend Mercantile,10/30/2026,BL-8OZ,Bourbon Leather 8 oz Candle,24,16.00,Confirmed,Faire
+F-10034,10/20/2026,Riverbend Mercantile,10/30/2026,SB-MELT,Sweet Bourbon Wax Melt,36,6.50,Confirmed,Faire
+F-10034,10/20/2026,Riverbend Mercantile,10/30/2026,BL-MELT,Bourbon Leather Wax Melt,36,6.50,Confirmed,Faire
+F-10041,10/22/2026,Front Porch Boutique,11/03/2026,LD-32,Laundry Scent Booster 32 oz,12,18.00,Confirmed,Faire
+F-10041,10/22/2026,Front Porch Boutique,11/03/2026,MOP-16,Mop Wash Bourbon Oak 16 oz,12,12.00,Confirmed,Faire
+F-10041,10/22/2026,Front Porch Boutique,11/03/2026,SB-80Z,Sweet Bourbon 8 oz Candle,6,16.00,Confirmed,Faire
+MT-5530,10/18/2026,Bluegrass Home Co.,11/06/2026,SB-8OZ,Sweet Bourbon 8 oz Candle,24,14.00,Open,MarketTime
+MT-5530,10/18/2026,Bluegrass Home Co.,11/06/2026,HV-8OZ,Holiday Vanilla 8 oz Candle,12,16.00,Open,MarketTime
+MT-5531,10/25/2026,Bluegrass Home Co.,11/20/2026,BL-8OZ,Bourbon Leather 8 oz Candle,12,16.00,Open,MarketTime
+MT-5531,10/25/2026,Bluegrass Home Co.,11/20/2026,RS-4,Room Spray Sweet Bourbon 4 oz,12,10.00,Open,MarketTime
+F-10052,10/26/2026,Willow Lane Market,,SB-1Oil,Sweet Bourbon Fragrance Oil 1 oz,12,9.00,New,Faire
+F-10052,10/26/2026,Willow Lane Market,,SB-1Oil,Sweet Bourbon Fragrance Oil 1 oz,6,9.00,New,Faire
+F-09987,10/01/2026,Oak & Ember Gifts,10/10/2026,SB-8OZ,Sweet Bourbon 8 oz Candle,12,16.00,Shipped,Faire
+F-10060,10/26/2026,Riverbend Mercantile,11/05/2026,MOP-16,Mop Wash Bourbon Oak 16 oz,0,12.00,New,Faire

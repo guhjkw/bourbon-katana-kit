@@ -1,0 +1,57 @@
+
+1. First visit
+  PASS four boxes, results hidden
+
+2. Sample files: product codes
+  PASS results and sample banner shown
+  PASS 9 to fix, 1 to check, 10 / 15 products / materials, 35 usable recipe lines
+  PASS 10 problems listed
+  PASS SB-1OIL becomes SB-1Oil to match Faire
+  PASS "Clean capitals" lists the Faire listing to change instead
+
+3. Katana files
+  PASS materials 14 rows, products 10, recipes 35
+  PASS preview shows the first product
+  PASS products .xlsx opens in Excel with Katana’s columns
+  PASS a dropped Katana template is recognised as the products template
+  PASS ...and the products file is filled into it
+  PASS the download uses the template’s own column order
+  PASS one workbook with all three sheets
+
+4. Order desk
+  PASS 9 lines need attention, 7 open orders, $2,610.00
+  PASS "Price differs" shows the MarketTime line
+  PASS unknown code shows the closest real one
+
+5. Make plan
+  PASS Wax 152 units, about $572.30 of materials
+  PASS room spray marked "no recipe yet"
+  PASS a 30-day window takes in the 20 Nov order (BL-8OZ ordered 36)
+  PASS without topping up, the plan changes
+
+6. Cutover plan
+  PASS go-live 30 Nov, first step 6 Nov
+  PASS a go-live too soon is called out
+
+7. Real files dropped in (Excel SOS list, CSV recipes and orders)
+  PASS clear hides the results
+  PASS Excel SOS list read (27 rows) with the same 9 fixes
+  PASS no sample banner for real files
+
+8. Changing a column changes the result
+  PASS with no price column, the ordered products show as missing a price
+  PASS putting it back restores the result
+
+9. Wrong files are refused with a reason
+  PASS orders dropped in the SOS box: "looks like an orders export", results hidden
+  PASS a PDF is refused and says what to do
+
+10. Downloads
+  PASS make plan workbook: Make and Buy sheets
+  PASS code fix list CSV: header plus 10 problems
+
+11. Phone width
+  PASS no sideways scrolling on a phone
+  PASS no console or page errors
+
+33 passed, 0 failed

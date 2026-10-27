@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Katana Move Kit</title>
+<style>
+  :root { --ink:#1d1a16; --muted:#6b6258; --line:#e4dccf; --bg:#f8f5f0; --card:#ffffff; --accent:#8a4a12; --accent-soft:#f6ebdd; --fix:#a3341f; --fix-soft:#fbeae6; --warn:#946200; --warn-soft:#fff4dc; --ok:#2f6b3a; --ok-soft:#e8f3ea; --info:#4b5563; --info-soft:#eef0f2; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--ink); background: var(--bg); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+  header.top { background: linear-gradient(135deg, #2a1a0c, #5c3210 55%, #8a4a12); color: #fff; padding: 28px 0 24px; }
+  .brand { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; }
+  .brand span { font-size: 15px; font-weight: 500; opacity: .8; margin-left: 8px; }
+  .lead { max-width: 780px; margin: 8px 0 6px; font-size: 16px; opacity: .95; }
+  .privacy { margin: 0; font-size: 13px; opacity: .85; }
+  h2 { font-size: 19px; margin: 28px 0 12px; }
+  h3 { font-size: 16px; margin: 18px 0 8px; }
+  .slots { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+  .slot { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+  .slot.loaded { border-color: #d9b48a; }
+  .slot-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .tag { font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; }
+  .drop { display: block; border: 2px dashed #dcc6aa; border-radius: 10px; padding: 14px 12px; text-align: center; cursor: pointer; background: #fffdf9; }
+  .drop.over { border-color: var(--accent); background: var(--accent-soft); }
+  .drop input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+  .drop span { display: block; font-weight: 600; word-break: break-word; }
+  .drop small { display: block; color: var(--muted); margin-top: 4px; }
+  .slot.loaded .drop { border-style: solid; border-color: #ead8c2; }
+  details { margin-top: 8px; font-size: 13px; }
+  summary { cursor: pointer; color: var(--accent); }
+  .maps { display: grid; gap: 6px; margin-top: 8px; }
+  .map { display: grid; grid-template-columns: 1fr 1.3fr; gap: 6px; align-items: center; }
+  .map span { color: var(--muted); }
+  select, input[type=date] { font: inherit; padding: 5px 8px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); max-width: 100%; }
+  .err { color: var(--fix); font-size: 13px; margin: 8px 0 0; }
+  .bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; }
+  button { font: inherit; cursor: pointer; border-radius: 9px; border: 1px solid var(--accent); background: var(--accent); color: #fff; padding: 8px 14px; font-weight: 600; }
+  button.ghost { background: #fff; color: var(--accent); }
+  button.link { background: none; border: 0; color: var(--muted); padding: 4px 0 0; font-weight: 500; text-decoration: underline; }
+  .banner { background: var(--warn-soft); border: 1px solid #ecd39b; border-radius: 10px; padding: 8px 12px; font-size: 14px; }
+  .note { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 14px; margin: 10px 0; }
+  .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+  .tabs button { background: none; border: 0; border-bottom: 3px solid transparent; color: var(--muted); border-radius: 0; padding: 10px 14px; white-space: nowrap; }
+  .tabs button[aria-selected=true] { color: var(--accent); border-bottom-color: var(--accent); }
+  .panel { padding-top: 16px; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+  .tile { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+  .tile b { display: block; font-size: 22px; letter-spacing: -0.01em; }
+  .tile span { color: var(--muted); font-size: 13px; }
+  .tile.fix b { color: var(--fix); } .tile.warn b { color: var(--warn); } .tile.ok b { color: var(--ok); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 10px; }
+  .chip { background: #fff; color: var(--ink); border: 1px solid var(--line); border-radius: 999px; padding: 5px 11px; font-weight: 500; font-size: 13px; }
+  .chip[aria-pressed=true] { background: var(--ink); color: #fff; border-color: var(--ink); }
+  table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; font-size: 14px; }
+  th { background: #fbf8f3; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  tr:last-child td { border-bottom: 0; }
+  .pill { display: inline-block; border-radius: 999px; padding: 2px 9px; font-size: 12px; font-weight: 600; white-space: nowrap; margin: 1px 4px 1px 0; }
+  .pill.fix { background: var(--fix-soft); color: var(--fix); } .pill.warn { background: var(--warn-soft); color: var(--warn); }
+  .pill.ok { background: var(--ok-soft); color: var(--ok); } .pill.info { background: var(--info-soft); color: var(--info); }
+  .muted { color: var(--muted); } .small { font-size: 13px; }
+  .num { text-align: right; white-space: nowrap; }
+  code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; background: #f3ece2; padding: 1px 5px; border-radius: 5px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+  .cards > div { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+  .seg { display: inline-flex; gap: 0; border: 1px solid var(--accent); border-radius: 9px; overflow: hidden; }
+  .seg button { border: 0; border-radius: 0; padding: 6px 12px; font-size: 13px; background: #fff; color: var(--accent); }
+  .seg button[aria-pressed=true] { background: var(--accent); color: #fff; }
+  .offer td:last-child { white-space: nowrap; }
+  footer { margin: 36px 0 24px; color: var(--muted); font-size: 13px; }
+  .hidden { display: none !important; }
+  .scroll { overflow-x: auto; }
+  @media (max-width: 720px) {
+    .rowtable thead { display: none; }
+    .rowtable tr { display: block; border-bottom: 1px solid var(--line); padding: 6px 0; }
+    .rowtable td { display: block; border: 0; padding: 3px 12px; }
+    .rowtable td.num { text-align: left; }
+    .map { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+  @media print { header.top, #load, .tabs, #next, footer, .noprint { display: none !important; } body { background: #fff; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">Katana Move Kit <span>for Bourbon Royalty</span></div>
+    <p class="lead">Drop in your SOS item list, your SOS assemblies and your Faire or MarketTime orders. You get the product-code problems to fix before the move, Katana import files built from your own data, every open order checked, and what each line needs to make this week.</p>
+    <p class="privacy">Your files stay on this computer: they are read in your browser and never uploaded. Nothing in SOS, QuickBooks, Faire or Katana is changed.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="load">
+    <h2>1. Your exports</h2>
+    <div class="slots" id="slots"></div>
+    <div class="bar">
+      <button id="sample" type="button">Try it with sample files</button>
+      <button id="clear" type="button" class="ghost">Clear</button>
+      <label class="small">Check as of <input type="date" id="asof"></label>
+    </div>
+    <p class="banner hidden" id="samplebanner">You are looking at sample files: an invented candle line, invented retailers and invented stock, checked as of 27 Oct 2026. Drop in your own exports to see your real items and orders.</p>
+  </section>
+
+  <section id="results" class="hidden">
+    <h2>2. Your move to Katana</h2>
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="codes" aria-selected="true">Product codes</button>
+      <button role="tab" data-tab="files" aria-selected="false">Katana files</button>
+      <button role="tab" data-tab="desk" aria-selected="false">Order desk</button>
+      <button role="tab" data-tab="plan" aria-selected="false">Make plan</button>
+      <button role="tab" data-tab="cutover" aria-selected="false">Cutover plan</button>
+      <button role="tab" data-tab="downloads" aria-selected="false">Downloads</button>
+    </nav>
+    <div class="panel" id="codes"></div>
+    <div class="panel hidden" id="files"></div>
+    <div class="panel hidden" id="desk"></div>
+    <div class="panel hidden" id="plan"></div>
+    <div class="panel hidden" id="cutover"></div>
+    <div class="panel hidden" id="downloads"></div>
+  </section>
+
+  <section id="next" class="offer">
+    <h2>Make it run on its own, inside Katana</h2>
+    <p>Today you drop the exports in. On your accounts it becomes part of how the business runs, so there is less to type and less to check by hand. Four fixed-price steps, one at a time on Upwork:</p>
+    <table>
+      <thead><tr><th>Step</th><th>What you get</th><th class="num">Price</th></tr></thead>
+      <tbody>
+        <tr><td>1. The Katana move</td><td>Codes cleaned, items, recipes and reorder points imported, Syncware sending Faire and MarketTime orders into Katana, invoices to QuickBooks when an order is packed, and a parallel week so nothing is billed twice.</td><td class="num">$2,800</td></tr>
+        <tr><td>2. Wholesale order desk</td><td>Every new Faire and MarketTime order checked before it reaches production, with the retailer's notes read for special requests. You get a short list each morning.</td><td class="num">$2,200</td></tr>
+        <tr><td>3. Make plan and purchasing</td><td>A weekly make plan for each line from open orders, stock and recipes, with the wax, fragrance, jars and wicks to order drafted as purchase orders in Katana.</td><td class="num">$3,000</td></tr>
+        <tr><td>4. Monday summary</td><td>Orders in, production due, low stock, late shipments and unpaid invoices, plus the retailers due to reorder, every Monday.</td><td class="num">$1,500</td></tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>Sample files are invented (items, retailers, stock and prices). Your own files are read in this browser only and are not sent anywhere. Katana column names follow Katana's import templates; drop your own blank templates in to fill them exactly.</p>
+  <p>Built by Taiwo, Pathfinder Automation Solutions, with Claude Code.</p>
+</footer>
+
+<script src="src/tablekit.js"></script>
+<script src="src/katanaKit.js"></script>
+<script src="src/samples.js"></script>
+<script>
+(function () {
+  'use strict';
+  const TK = window.TableKit, K = window.KatanaKit;
+  const SLOTS = [
+    { kind: 'items', title: 'SOS item list', hint: 'SOS: Items, then Export (Excel is best)', what: 'an SOS item list' },
+    { kind: 'bom', title: 'SOS assemblies (recipes)', hint: 'One row per component: assembly, component, quantity', what: 'an assemblies (bill of materials) export' },
+    { kind: 'orders', title: 'Wholesale orders', hint: 'Faire or MarketTime orders export (or Syncware’s)', what: 'an orders export' },
+    { kind: 'templates', title: 'Katana blank templates', hint: 'Optional. Katana: Settings, Import, then download the blank templates', what: '', optional: true, multiple: true }
+  ];
+  const state = { tables: {}, files: {}, maps: { items: {}, bom: {}, orders: {} }, templates: {}, asOf: today(), sample: false, tab: 'codes', codes: 'orders', deskFilter: 'attention', horizon: 14, topUp: true, goLive: null };
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  function today() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  const plural = (n, w) => n + ' ' + w + (n === 1 ? '' : 's');
+
+  // ---------- loading ----------
+  function slotHtml(s) {
+    if (s.kind === 'templates') {
+      const names = Object.entries(state.templates);
+      return '<div class="slot' + (names.length ? ' loaded' : '') + '" data-kind="templates"><div class="slot-head"><b>' + esc(s.title) + '</b><span class="tag">optional</span></div>' +
+        '<label class="drop" data-kind="templates"><input type="file" multiple accept=".xlsx,.csv" data-kind="templates"><span>' + (names.length ? names.map(([k, t]) => esc(k) + ': ' + esc(t.name)).join('<br>') : 'Drop Katana’s templates here') + '</span><small>' + esc(s.hint) + '</small></label>' +
+        (state.templateError ? '<p class="err">' + esc(state.templateError) + '</p>' : '') + (names.length ? '<button class="link" type="button" data-remove="templates">Remove</button>' : '') + '</div>';
+    }
+    const t = state.tables[s.kind], f = state.files[s.kind];
+    const cols = t ? K.columns(s.kind, t, state.maps[s.kind]) : null;
+    let mapping = '';
+    if (cols) {
+      const spec = K.SPECS[s.kind], fields = Object.keys(spec), found = fields.filter((k) => cols.map[k]).length;
+      const wrong = !cols.missing.length && wrongBox(s.kind, t);
+      const miss = wrong ? '<p class="err">This looks like ' + esc(wrong.what) + ', not ' + esc(s.what) + '. Drop it in the ' + esc(wrong.title) + ' box.</p>' : cols.missing.length ? '<p class="err">This does not look like ' + esc(s.what) + ': no ' + esc(cols.missing.map((k) => spec[k].label.toLowerCase()).join(' or ')) + ' column found. Pick it below, or drop the file in the right box.</p>' : '';
+      mapping = miss + '<details' + (cols.missing.length ? ' open' : '') + '><summary>Columns: ' + found + ' of ' + fields.length + ' found. Check or change</summary><div class="maps">' +
+        fields.map((k) => '<label class="map"><span>' + esc(spec[k].label) + (spec[k].required ? ' *' : '') + '</span><select data-kind="' + s.kind + '" data-field="' + k + '"><option value="">(not in this file)</option>' +
+          t.headers.map((h) => '<option' + (cols.map[k] === h ? ' selected' : '') + '>' + esc(h) + '</option>').join('') + '</select></label>').join('') + '</div></details>';
+    }
+    return '<div class="slot' + (t ? ' loaded' : '') + '" data-kind="' + s.kind + '"><div class="slot-head"><b>' + esc(s.title) + '</b></div>' +
+      '<label class="drop" data-kind="' + s.kind + '"><input type="file" accept=".csv,.xlsx,.txt,.tsv" data-kind="' + s.kind + '"><span>' + (t ? esc(f.name) + ': ' + t.records.length + ' rows' : 'Drop the file here or click to choose') + '</span><small>' + esc(s.hint) + '</small></label>' +
+      (f && f.error ? '<p class="err">' + esc(f.name) + ': ' + esc(f.error) + '</p>' : '') + mapping + (t || (f && f.error) ? '<button class="link" type="button" data-remove="' + s.kind + '">Remove</button>' : '') + '</div>';
+  }
+  function renderSlots() {
+    const open = new Set([...document.querySelectorAll('#slots details[open]')].map((d) => d.closest('.slot').dataset.kind));
+    $('#slots').innerHTML = SLOTS.map(slotHtml).join('');
+    open.forEach((k) => { const d = document.querySelector('#slots .slot[data-kind="' + k + '"] details'); if (d) d.open = true; });
+  }
+  function leaveSample() { if (state.sample) { state.tables = {}; state.files = {}; state.sample = false; state.asOf = today(); state.goLive = null; } }
+  async function loadFile(kind, file) {
+    leaveSample();
+    try {
+      const t = TK.toTable(await TK.readFile(new Uint8Array(await file.arrayBuffer()), file.name));
+      if (!t.headers.length || !t.records.length) throw new Error('no rows with column names found. Is this the export, or a summary report?');
+      state.tables[kind] = t; state.files[kind] = { name: file.name }; state.maps[kind] = {};
+    } catch (e) { delete state.tables[kind]; state.files[kind] = { name: file.name, error: e.message }; }
+    refresh();
+  }
+  // Katana's blank templates: which one is which is read from its column names
+  async function loadTemplates(files) {
+    state.templateError = '';
+    for (const file of files) {
+      try {
+        const t = TK.toTable(await TK.readFile(new Uint8Array(await file.arrayBuffer()), file.name));
+        const h = t.headers.map((x) => x.toLowerCase()).join('|');
+        const kind = /ingredient/.test(h) ? 'recipes' : /material/.test(h) ? 'materials' : /product|variant/.test(h) ? 'products' : null;
+        if (!kind) throw new Error(file.name + ': not a Katana products, materials or recipes template');
+        state.templates[kind] = { name: file.name, headers: t.headers };
+      } catch (e) { state.templateError = e.message; }
+    }
+    refresh();
+  }
+  function loadSamples() {
+    state.tables = {}; state.files = {}; state.maps = { items: {}, bom: {}, orders: {} };
+    Object.entries(window.KIT_SAMPLES).forEach(([k, s]) => { state.tables[k] = TK.toTable(TK.parseCsv(s.text)); state.files[k] = { name: s.name }; });
+    state.sample = true; state.asOf = '2026-10-27'; state.goLive = null; refresh();
+  }
+
+
+  // A file that plainly belongs in another box: another export type finds all its required columns in it and
+  // clearly more of its columns than this box does (an orders export has a code and a product name too).
+  function wrongBox(kind, t) {
+    const share = (k, fixed) => { const c = K.columns(k, t, fixed); return { c, sc: Object.values(c.map).filter(Boolean).length / Object.keys(K.SPECS[k]).length }; };
+    const own = share(kind, state.maps[kind]).sc;
+    let best = null;
+    SLOTS.forEach((s) => {
+      if (s.kind === kind || !K.SPECS[s.kind]) return;
+      const o = share(s.kind, {});
+      if (!o.c.missing.length && o.sc >= own + 0.3 && (!best || o.sc > best.sc)) best = { slot: s, sc: o.sc };
+    });
+    return best ? best.slot : null;
+  }
+  const usable = (kind) => state.tables[kind] && !K.columns(kind, state.tables[kind], state.maps[kind]).missing.length && !wrongBox(kind, state.tables[kind]);
+  // ---------- results ----------
+  function compute() {
+    const tables = {}; Object.keys(state.tables).forEach((k) => { if (usable(k)) tables[k] = state.tables[k]; });
+    const data = K.prepare(tables, state.maps, { codes: state.codes, horizonDays: state.horizon, topUp: state.topUp });
+    const a = K.audit(data);
+    return { data, a, desk: tables.orders ? K.orderDesk(data, a, state.asOf) : null, plan: K.makePlan(data, a, state.asOf), cut: K.cutoverPlan(data, a, state.goLive, state.asOf) };
+  }
+  function refresh() {
+    renderSlots();
+    $('#asof').value = state.asOf;
+    $('#samplebanner').classList.toggle('hidden', !state.sample);
+    state.r = null;
+    if (!usable('items')) { $('#results').classList.add('hidden'); return; }
+    state.r = compute();
+    $('#results').classList.remove('hidden');
+    renderCodes(); renderFiles(); renderDesk(); renderPlan(); renderCutover(); renderDownloads();
+  }
+
+  function renderCodes() {
+    const { data, a } = state.r;
+    const skipped = data.problems.length ? '<details><summary>' + plural(data.problems.length, 'row') + ' could not be read and were skipped</summary><ul>' + data.problems.map((p) => '<li>' + esc(p.file) + ' row ' + p.row + ': ' + esc(p.text) + '</li>').join('') + '</ul></details>' : '';
+    const recipeLines = Object.values(a.recipes).reduce((s, r) => s + r.length, 0);
+    $('#codes').innerHTML = '<div class="tiles">' +
+      '<div class="tile ' + (a.fix ? 'fix' : 'ok') + '"><b>' + a.fix + '</b><span>to fix before importing into Katana</span></div>' +
+      '<div class="tile warn"><b>' + a.warn + '</b><span>to check (costs, prices, units)</span></div>' +
+      '<div class="tile"><b>' + a.products.length + ' / ' + a.materials.length + '</b><span>products / materials going to Katana</span></div>' +
+      '<div class="tile"><b>' + recipeLines + '</b><span>recipe lines ' + (state.tables.bom ? 'ready' : '(add the assemblies export)') + '</span></div></div>' + skipped +
+      '<div class="note"><b>Codes in Katana:</b> <span class="seg" role="group" aria-label="Codes"><button type="button" data-codes="orders" aria-pressed="' + (state.codes === 'orders') + '">Use what Faire and MarketTime send</button><button type="button" data-codes="clean" aria-pressed="' + (state.codes === 'clean') + '">Clean capitals</button></span>' +
+      '<p class="small muted" style="margin:8px 0 0">' + (state.codes === 'orders' ? 'Katana gets the exact spelling your orders use, so Syncware matches without touching a single listing. ' + (a.renames.length ? plural(a.renames.length, 'item') + (a.renames.length === 1 ? ' changes' : ' change') + ' spelling: ' + a.renames.map((r) => '<code>' + esc(r.from) + '</code> becomes <code>' + esc(r.to) + '</code>').join(', ') + '.' : 'No spelling changes needed.') : 'Every code becomes capitals with single hyphens. ' + (a.listingChanges.length ? plural(a.listingChanges.length, 'listing') + ' on Faire or MarketTime must change to match: ' + a.listingChanges.map((r) => '<code>' + esc(r.from) + '</code> to <code>' + esc(r.to) + '</code>').join(', ') + '.' : 'No listing changes needed.')) + '</p></div>' +
+      (a.issues.length ? '<table class="rowtable"><thead><tr><th>Problem</th><th>Where</th><th>What to do</th></tr></thead><tbody>' + a.issues.map((x) => '<tr data-code="' + x.code + '"><td><span class="pill ' + x.level + '">' + esc(x.title) + '</span></td><td>' + esc(x.detail) + '</td><td class="small">' + esc(x.fix) + '</td></tr>').join('') + '</tbody></table>' : '<p class="note">No problems found: the codes are ready for Katana.</p>');
+  }
+
+  function fileFor(kind) {
+    const { data, a } = state.r;
+    if (state.templates[kind]) { const f = K.fillTemplate(kind, state.templates[kind].headers, data, a); return { headers: f.headers, rows: f.rows, template: state.templates[kind].name, unplaced: f.unplaced }; }
+    return K.katanaFiles(data, a)[kind];
+  }
+  function renderFiles() {
+    const { a } = state.r;
+    const card = (kind, title, order, text) => { const f = fileFor(kind); return '<div><b>' + order + '. ' + esc(title) + '</b> <span class="muted small">' + plural(f.rows.length, 'row') + '</span><p class="small muted">' + text + (f.template ? '<br><span class="pill ok">filled into your template: ' + esc(f.template) + '</span>' : '') + (f.unplaced && f.unplaced.length ? '<br><span class="pill warn">no column in your template for: ' + esc(f.unplaced.join(', ')) + '</span>' : '') + '</p><button type="button" data-dl="k-' + kind + '-xlsx">Excel</button> <button type="button" class="ghost" data-dl="k-' + kind + '-csv">CSV</button></div>'; };
+    const pf = fileFor('products');
+    $('#files').innerHTML = '<p>Import in this order: Katana can only use items in a recipe once they exist.' + (a.fix ? ' <b>' + plural(a.fix, 'code problem') + '</b> on the Product codes tab should be fixed first, or those items import wrong or not at all.' : '') + '</p><div class="cards">' +
+      card('materials', 'Materials', 1, 'Wax, fragrance oils, jars, lids, wicks, labels and other inputs, with costs and suppliers.') +
+      card('products', 'Products', 2, 'What you sell, with wholesale prices. Items with a recipe are set to Make, the rest to Buy.') +
+      card('recipes', 'Recipes', 3, 'One row per ingredient, on the same codes as the two files above.') + '</div>' +
+      '<h3>Products file, first rows</h3><div class="scroll"><table><thead><tr>' + pf.headers.map((h) => '<th>' + esc(h) + '</th>').join('') + '</tr></thead><tbody>' +
+      pf.rows.slice(0, 8).map((r) => '<tr>' + r.map((v) => '<td class="small">' + esc(v) + '</td>').join('') + '</tr>').join('') + '</tbody></table></div>' +
+      (a.skipped.length ? '<p class="small muted">Left out on purpose: ' + a.skipped.map((x) => esc((x.sku || '(no code)') + ' ' + x.name)).join(', ') + ' (services, and archived items nobody orders).</p>' : '');
+  }
+
+  const FLAG_LEVEL = { unknown: 'fix', archived: 'fix', price: 'fix', qty: 'fix', no_ship: 'warn', late: 'fix', soon: 'info', dup: 'fix', case: 'info' };
+  function renderDesk() {
+    const d = state.r.desk;
+    if (!d) { $('#desk').innerHTML = '<p class="muted">Add the Faire or MarketTime orders export to check every open order.</p>'; return; }
+    const s = d.summary, codes = Object.keys(d.counts);
+    const shown = state.deskFilter === 'attention' ? d.exceptions : state.deskFilter === 'all' ? d.lines : d.lines.filter((l) => l.flags.some((f) => f.code === state.deskFilter));
+    $('#desk').innerHTML = '<div class="tiles"><div class="tile ' + (d.exceptions.length ? 'fix' : 'ok') + '"><b>' + d.exceptions.length + '</b><span>order lines need attention</span></div><div class="tile"><b>' + s.orders + '</b><span>open orders, ' + plural(s.retailers, 'retailer') + '</span></div><div class="tile"><b>' + s.units.toLocaleString('en-US') + '</b><span>units on ' + plural(s.lines, 'line') + '</span></div><div class="tile"><b>' + esc(K.money(s.value)) + '</b><span>at wholesale</span></div></div>' +
+      '<div class="chips"><button class="chip" data-desk="attention" aria-pressed="' + (state.deskFilter === 'attention') + '">Needs attention (' + d.exceptions.length + ')</button>' + codes.map((c) => '<button class="chip" data-desk="' + c + '" aria-pressed="' + (state.deskFilter === c) + '">' + esc(({ unknown: 'Code not in SOS', case: 'Spelled differently', archived: 'Archived item', price: 'Price differs', qty: 'Quantity', no_ship: 'No ship-by date', late: 'Late', soon: 'Ships this week', dup: 'Duplicate line' })[c]) + ' (' + d.counts[c] + ')</button>').join('') + '<button class="chip" data-desk="all" aria-pressed="' + (state.deskFilter === 'all') + '">Every open line (' + d.lines.length + ')</button></div>' +
+      (shown.length ? '<table class="rowtable"><thead><tr><th>Order</th><th>Retailer</th><th>Ship by</th><th>Code</th><th>Product</th><th class="num">Qty</th><th class="num">Price</th><th>Check</th></tr></thead><tbody>' + shown.map((l) => '<tr><td>' + esc(l.order) + (l.source ? '<br><span class="muted small">' + esc(l.source) + '</span>' : '') + '</td><td>' + esc(l.retailer) + '</td><td>' + esc(l.shipBy ? K.niceDate(l.shipBy) : '') + '</td><td><code>' + esc(l.sku) + '</code>' + (l.item && l.katanaSku !== l.sku ? '<br><span class="muted small">Katana: ' + esc(l.katanaSku) + '</span>' : '') + '</td><td class="small">' + esc(l.product || (l.item ? l.item.name : '')) + '</td><td class="num">' + esc(l.qty) + '</td><td class="num">' + esc(l.price != null ? K.money(l.price) : '') + '</td><td>' + (l.flags.length ? l.flags.map((f) => '<span class="pill ' + FLAG_LEVEL[f.code] + '">' + esc(f.text) + '</span>').join('') : '<span class="pill ok">ready</span>') + '</td></tr>').join('') + '</tbody></table>' : '<p class="muted">Nothing here.</p>');
+  }
+
+  function renderPlan() {
+    const p = state.r.plan;
+    const controls = '<div class="bar noprint" style="margin-top:0"><span class="small">Orders shipping in the next</span><span class="seg" role="group" aria-label="Window">' + [7, 14, 30].map((n) => '<button type="button" data-horizon="' + n + '" aria-pressed="' + (state.horizon === n) + '">' + n + ' days</button>').join('') + '</span><label class="small"><input type="checkbox" id="topup"' + (state.topUp ? ' checked' : '') + '> Top up to reorder points</label></div>';
+    if (!usable('orders')) { $('#plan').innerHTML = controls + '<p class="muted">Add the orders export to see what to make.</p>'; return; }
+    $('#plan').innerHTML = controls + '<p>Up to <b>' + esc(K.niceDate(p.until)) + '</b>: ' + plural(p.make.reduce((s, m) => s + m.qty, 0), 'unit') + ' to make across ' + plural(p.lines.length, 'line') + (p.materials.length ? ', and about <b>' + esc(K.money(p.spend)) + '</b> of materials to buy' + (p.missingCost ? ' (plus ' + plural(p.missingCost, 'material') + ' with no cost in SOS)' : '') : '') + '.</p>' +
+      p.lines.map((L) => '<h3>' + esc(L.line) + ': ' + plural(L.units, 'unit') + '</h3><table class="rowtable"><thead><tr><th>Code</th><th>Item</th><th class="num">Ordered</th><th class="num">On hand</th><th class="num">Reorder point</th><th class="num">Make</th><th>First ships</th></tr></thead><tbody>' +
+        L.items.map((m) => '<tr><td><code>' + esc(m.item.katanaSku) + '</code></td><td>' + esc(m.item.name) + (m.noRecipe ? ' <span class="pill warn">no recipe yet</span>' : '') + '</td><td class="num">' + m.demand + '</td><td class="num">' + m.onHand + '</td><td class="num">' + m.reorder + '</td><td class="num"><b>' + m.qty + '</b></td><td>' + esc(m.firstShip ? K.niceDate(m.firstShip) : '') + '</td></tr>').join('') + '</tbody></table>').join('') +
+      (p.buyFinished.length ? '<h3>Bought in finished</h3><table class="rowtable"><tbody>' + p.buyFinished.map((b) => '<tr><td><code>' + esc(b.item.katanaSku) + '</code></td><td>' + esc(b.item.name) + '</td><td class="num"><b>' + b.qty + '</b></td></tr>').join('') + '</tbody></table>' : '') +
+      (p.materials.length ? '<h3>Materials to buy</h3><table class="rowtable"><thead><tr><th>Code</th><th>Material</th><th class="num">Needed</th><th class="num">On hand</th><th class="num">To buy</th><th>Supplier</th><th class="num">Cost</th></tr></thead><tbody>' +
+        p.materials.map((m) => '<tr' + (m.toBuy ? '' : ' class="muted"') + '><td><code>' + esc(m.item.katanaSku) + '</code></td><td>' + esc(m.item.name) + '</td><td class="num">' + esc(K.qtyText(m.needed)) + ' ' + esc(m.item.uom) + '</td><td class="num">' + esc(K.qtyText(m.onHand)) + '</td><td class="num"><b>' + esc(K.qtyText(m.toBuy)) + '</b></td><td class="small">' + esc(m.vendor) + '</td><td class="num">' + (m.toBuy ? (m.cost != null ? esc(K.money(m.cost)) : '<span class="pill warn">no cost</span>') : '') + '</td></tr>').join('') + '</tbody></table>' : '<p class="muted small">Add the assemblies export to see the materials each batch needs.</p>');
+  }
+
+  function renderCutover() {
+    const c = state.r.cut;
+    $('#cutover').innerHTML = '<div class="bar noprint" style="margin-top:0"><label>Go-live <input type="date" id="golive" value="' + esc(c.goLive) + '"></label><span class="small muted">Weekends and US holidays are skipped.</span></div>' +
+      (c.tooSoon ? '<p class="banner">This go-live leaves too little time: the first step would already be in the past. Pick a later date.</p>' : '') +
+      '<table class="rowtable"><thead><tr><th>When</th><th>Who</th><th>What</th></tr></thead><tbody>' + c.steps.map((s) => '<tr' + (s.past ? ' class="muted"' : '') + '><td>' + esc(s.nice) + '</td><td class="small">' + esc(s.who) + '</td><td>' + esc(s.what) + '</td></tr>').join('') + '</tbody></table>';
+  }
+
+  function renderDownloads() {
+    $('#downloads').innerHTML = '<div class="cards">' +
+      '<div><b>Code fix list</b><p class="small muted">Every product-code problem and what to do.</p><button type="button" data-dl="fix-xlsx">Excel</button> <button type="button" class="ghost" data-dl="fix-csv">CSV</button></div>' +
+      '<div><b>Katana import files</b><p class="small muted">Materials, products and recipes in one workbook (three sheets).</p><button type="button" data-dl="k-all-xlsx">Excel</button></div>' +
+      '<div><b>Order desk</b><p class="small muted">Every open line with its checks.</p><button type="button" data-dl="desk-xlsx">Excel</button> <button type="button" class="ghost" data-dl="desk-csv">CSV</button></div>' +
+      '<div><b>Make plan and buy list</b><p class="small muted">Two sheets: what to make, what to buy.</p><button type="button" data-dl="plan-xlsx">Excel</button></div>' +
+      '<div><b>Cutover plan</b><p class="small muted">The dated steps.</p><button type="button" data-dl="cut-csv">CSV</button></div>' +
+      '<div><b>Sample files</b><p class="small muted">The invented exports, to see the format.</p><button type="button" class="ghost" data-dl="samples">Download samples</button></div></div>';
+  }
+
+  function download(name, content, type) {
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([content], { type })); a.download = name;
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  }
+  const XLSX = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+  function doDownload(kind) {
+    const r = state.r, stamp = state.asOf;
+    const m = /^k-(products|materials|recipes)-(xlsx|csv)$/.exec(kind);
+    if (m) { const f = fileFor(m[1]); return m[2] === 'csv' ? download('katana-' + m[1] + '.csv', TK.toCsv(f.headers, f.rows), 'text/csv') : download('katana-' + m[1] + '.xlsx', TK.xlsxBytes([{ name: m[1], headers: f.headers, rows: f.rows }]), XLSX); }
+    if (kind === 'k-all-xlsx') return download('katana-import-files.xlsx', TK.xlsxBytes(['materials', 'products', 'recipes'].map((k) => Object.assign({ name: k }, fileFor(k)))), XLSX);
+    const FIX = ['Problem', 'Where', 'What to do'];
+    if (kind === 'fix-csv') return download('code-fix-list-' + stamp + '.csv', TK.toCsv(FIX, K.issuesRows(r.a)), 'text/csv');
+    if (kind === 'fix-xlsx') return download('code-fix-list-' + stamp + '.xlsx', TK.xlsxBytes([{ name: 'Code fixes', headers: FIX, rows: K.issuesRows(r.a) }]), XLSX);
+    const DESK = ['Order', 'Retailer', 'Order date', 'Ship by', 'Code on order', 'Katana code', 'Product', 'Qty', 'Price', 'Checks'];
+    if (kind === 'desk-csv' && r.desk) return download('order-desk-' + stamp + '.csv', TK.toCsv(DESK, K.orderRows(r.desk)), 'text/csv');
+    if (kind === 'desk-xlsx' && r.desk) return download('order-desk-' + stamp + '.xlsx', TK.xlsxBytes([{ name: 'Order desk', headers: DESK, rows: K.orderRows(r.desk) }]), XLSX);
+    if (kind === 'plan-xlsx') return download('make-plan-' + stamp + '.xlsx', TK.xlsxBytes([{ name: 'Make', headers: ['Line', 'Code', 'Item', 'Ordered', 'On hand', 'Reorder point', 'Make', 'First ships'], rows: K.planRows(r.plan) }, { name: 'Buy', headers: ['Code', 'Material', 'Needed', 'On hand', 'To buy', 'Unit', 'Supplier', 'Cost'], rows: K.buyRows(r.plan) }]), XLSX);
+    if (kind === 'cut-csv') return download('cutover-plan.csv', TK.toCsv(['Date', 'Who', 'What'], r.cut.steps.map((s) => [s.date, s.who, s.what])), 'text/csv');
+    if (kind === 'samples') Object.values(window.KIT_SAMPLES).forEach((s) => download(s.name, s.text, 'text/csv'));
+  }
+
+  // ---------- events ----------
+  const slots = $('#slots');
+  slots.addEventListener('change', (e) => {
+    const t = e.target;
+    if (t.matches('input[type=file]') && t.files.length) { if (t.dataset.kind === 'templates') loadTemplates([...t.files]); else loadFile(t.dataset.kind, t.files[0]); }
+    if (t.matches('select')) { state.maps[t.dataset.kind][t.dataset.field] = t.value; refresh(); }
+  });
+  slots.addEventListener('click', (e) => { const k = e.target.dataset.remove; if (!k) return; if (k === 'templates') { state.templates = {}; state.templateError = ''; } else { delete state.tables[k]; delete state.files[k]; state.maps[k] = {}; } refresh(); });
+  slots.addEventListener('dragover', (e) => { const d = e.target.closest('.drop'); if (d) { e.preventDefault(); d.classList.add('over'); } });
+  slots.addEventListener('dragleave', (e) => { const d = e.target.closest('.drop'); if (d) d.classList.remove('over'); });
+  slots.addEventListener('drop', (e) => { const d = e.target.closest('.drop'); if (!d) return; e.preventDefault(); d.classList.remove('over'); const fs = [...e.dataTransfer.files]; if (!fs.length) return; if (d.dataset.kind === 'templates') loadTemplates(fs); else loadFile(d.dataset.kind, fs[0]); });
+  $('#sample').addEventListener('click', loadSamples);
+  $('#clear').addEventListener('click', () => { state.tables = {}; state.files = {}; state.maps = { items: {}, bom: {}, orders: {} }; state.templates = {}; state.sample = false; state.asOf = today(); state.goLive = null; refresh(); });
+  $('#asof').addEventListener('change', (e) => { if (/^\d{4}-\d{2}-\d{2}$/.test(e.target.value)) { state.asOf = e.target.value; refresh(); } });
+  document.querySelector('.tabs').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-tab]'); if (!b) return;
+    state.tab = b.dataset.tab;
+    document.querySelectorAll('.tabs button').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+    ['codes', 'files', 'desk', 'plan', 'cutover', 'downloads'].forEach((id) => $('#' + id).classList.toggle('hidden', id !== state.tab));
+  });
+  $('#results').addEventListener('click', (e) => {
+    const t = e.target.closest('button'); if (!t) return;
+    if (t.dataset.codes) { state.codes = t.dataset.codes; refresh(); }
+    if (t.dataset.desk) { state.deskFilter = t.dataset.desk; renderDesk(); }
+    if (t.dataset.horizon) { state.horizon = +t.dataset.horizon; refresh(); }
+    if (t.dataset.dl) doDownload(t.dataset.dl);
+  });
+  $('#results').addEventListener('change', (e) => {
+    if (e.target.id === 'topup') { state.topUp = e.target.checked; refresh(); }
+    if (e.target.id === 'golive' && /^\d{4}-\d{2}-\d{2}$/.test(e.target.value)) { state.goLive = e.target.value; refresh(); }
+  });
+  refresh();
+})();
+</script>
+</body>
+</html>

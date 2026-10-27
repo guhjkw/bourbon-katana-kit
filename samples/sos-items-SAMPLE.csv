@@ -1,0 +1,28 @@
+Name,SKU,Description,Type,Category,Purchase Cost,Sales Price,Reorder Point,On Hand,Unit,Vendor,Archived
+Sweet Bourbon 8 oz Candle,SB-8OZ,Soy candle in amber jar (SAMPLE),Assembly,Wax,,16.00,24,18,each,,No
+Bourbon Leather 8 oz Candle,BL-8OZ,Soy candle in amber jar (SAMPLE),Assembly,Wax,,16.00,24,40,each,,No
+Sweet Bourbon Wax Melt,SB-MELT,6-cube clamshell,Assembly,Wax,,6.50,36,30,each,,No
+Bourbon Leather Wax Melt,BL-MELT,6-cube clamshell,Assembly,Wax,,6.50,36,12,each,,No
+Sweet Bourbon Fragrance Oil 1 oz,SB-1OIL,Dropper bottle,Assembly,Misc,,9.00,24,10,each,,No
+Bourbon Leather Fragrance Oil 1 oz,BL-1OIL,Dropper bottle,Assembly,Misc,,9.00,24,26,each,,No
+Laundry Scent Booster 32 oz,LD-32 ,Laundry booster,Assembly,Laundry,,18.00,12,6,each,,No
+Mop Wash Bourbon Oak 16 oz,MOP-16,Floor wash,Assembly,Mop,,12.00,12,4,each,,No
+Room Spray Sweet Bourbon 4 oz,RS-4,Room spray,Assembly,Misc,,10.00,12,8,each,,No
+Holiday Vanilla 8 oz Candle,HV-8OZ,Seasonal (discontinued),Assembly,Wax,,16.00,0,0,each,,Yes
+Soy Wax,WAX-SOY,Container soy wax,Inventory Item,Raw materials,2.10,,50,120,lb,Northline Wax Supply,No
+Soy Wax (old entry),wax-soy,Duplicate from 2024,Inventory Item,Raw materials,2.10,,0,0,lb,Northline Wax Supply,Yes
+Fragrance Oil Sweet Bourbon,FO-SB,,Inventory Item,Raw materials,1.80,,64,80,oz,Scent House Supply,No
+Fragrance Oil Bourbon Leather,FO-BL,,Inventory Item,Raw materials,1.90,,64,40,oz,Scent House Supply,No
+Amber Jar 8 oz,JAR-8,,Inventory Item,Packaging,0.95,,100,150,each,Amber Glass Depot,No
+Gold Lid 8 oz,LID-8,,Inventory Item,Packaging,0.35,,100,90,each,Amber Glass Depot,No
+Cotton Wick 8 oz,WICK-8,,Inventory Item,Raw materials,0.12,,200,300,each,Northline Wax Supply,No
+Front Label,LBL-FRONT,,Inventory Item,Packaging,0.09,,300,500,each,Print Shop,No
+Front Label (2025 design),LBL-FRONT,,Inventory Item,Packaging,0.09,,0,40,each,Print Shop,No
+Wax Melt Clamshell,CLAM-6,,Inventory Item,Packaging,0.30,,100,60,each,Amber Glass Depot,No
+1 oz Dropper Bottle,BTL-1OZ,,Inventory Item,Packaging,0.45,,100,40,each,Amber Glass Depot,No
+Laundry Booster Base,BASE-LD,,Inventory Item,Raw materials,,,200,300,oz,Chem Base Co,No
+32 oz Bottle,BTL-32,,Inventory Item,Packaging,0.85,,50,20,each,Amber Glass Depot,No
+Mop Wash Base,BASE-MOP,,Inventory Item,Raw materials,0.20,,200,150,oz,Chem Base Co,No
+16 oz Bottle,BTL-16,,Inventory Item,Packaging,0.60,,50,30,each,Amber Glass Depot,No
+Shipping Box Large,,,Inventory Item,Shipping,0.75,,50,80,each,Box Supply,No
+Wholesale Shipping,SHIP-FEE,Freight charge,Service,,,,,,,,No
